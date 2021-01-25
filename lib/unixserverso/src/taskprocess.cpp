@@ -124,6 +124,12 @@ int Task::ReadPacket(TRingBuffer *clientbuffer,char* szPacket, int iPackLen)
 		clientbuffer->PeekChar(iStartPos+5,packetlenhigh);
 		packetlen = MAKESHORT(packetlenlow,packetlenhigh);
 		////printf("packetlen = %d\n",packetlen);
+		if(packetlen > MAX_BUFFER)
+		{
+			//处理异常数据
+			clientbuffer->Clear();	
+			return iRet;
+		}			
 		iStopPos = iStartPos+packetlen;
 		if (iStopPos <= clientbuffer->GetMaxReadSize())
 		{
