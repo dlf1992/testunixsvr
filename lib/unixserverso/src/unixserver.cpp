@@ -93,14 +93,14 @@ void UnixServer::clearclienttime()
 {
 	activeconnectmaplocker.mutex_lock();
 	map<int,unsigned long>::iterator iter;
-	for(iter=m_activeclient.begin();iter!=m_activeclient.end();iter++)
+	for(iter=m_activeclient.begin();iter!=m_activeclient.end();)
 	{
-		m_activeclient.erase(iter);
+		m_activeclient.erase(iter++);
 	}
 	map<int,unsigned int>::iterator iter1;
-	for(iter1=m_connecttime.begin();iter1!=m_connecttime.end();iter1++)
+	for(iter1=m_connecttime.begin();iter1!=m_connecttime.end();)
 	{
-		m_connecttime.erase(iter1);
+		m_connecttime.erase(iter1++);
 	}
 	activeconnectmaplocker.mutex_unlock();		
 }

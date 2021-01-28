@@ -233,7 +233,6 @@ void Task::clearRingBuffer(int fd)
 		{
 			//找到pTRingBuffer，清除锁
 			//printf("found pTRingBuffer\n");
-			map_Clientlocker.erase(iter1);
 			for(int i=0;i<MAX_RingBuffer;i++)
 			{
 				if(iter1->second == pClientlocker[i])
@@ -247,9 +246,9 @@ void Task::clearRingBuffer(int fd)
 					break;
 				}	
 			}
+			map_Clientlocker.erase(iter1);
 		}
 		//清除缓冲区
-		map_TRingBuffer.erase(iter);
 		for(int i=0;i<MAX_RingBuffer;i++)
 		{
 			if(iter->second == pTRingBuffer[i])
@@ -263,6 +262,7 @@ void Task::clearRingBuffer(int fd)
 				break;
 			}
 		}
+		map_TRingBuffer.erase(iter);
 	}
 	TRingBuffermaplocker.mutex_unlock();	
 }
@@ -291,7 +291,7 @@ int Task::findclientfd(int type,int *fdarray)
 	int fdnum = 0;
 	clientlocker.mutex_lock();
 	map<int,int>::iterator iter;
-	for(iter=m_clienttype.begin();iter!=m_clienttype.end();iter++)
+	for(iter=m_clienttype.begin();iter!=m_clienttype.end();++iter)
 	{
 		if(iter->second == type)
 		{
@@ -338,7 +338,7 @@ int Task::dealprotocldata(const char* packet,int packetlen,int fd)
 	if(dstclienttype == 0x30)
 	{
 		map<int,int>::iterator iter;
-		for(iter=m_clienttype.begin();iter!=m_clienttype.end();iter++)
+		for(iter=m_clienttype.begin();iter!=m_clienttype.end();++iter)
 		{
 			if(iter->first == fd)
 			{
